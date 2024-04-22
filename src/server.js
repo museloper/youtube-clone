@@ -18,12 +18,13 @@ app.set('view engine', 'pug')
 
 // S: 미들웨어
 app.use(logger)
+app.use(express.urlencoded({ extended: true })) // available form ⭐
 // E: 미들웨어
 
 // S: 라우터
 app.use('/', globalRouter)
-app.use('/video', videoRouter)
-app.use('/user', userRouter)
+app.use('/videos', videoRouter)
+app.use('/users', userRouter)
 // E: 라우터
 
 app.listen(PORT, () =>
