@@ -31,7 +31,26 @@ const trending = (req, res) => {
 
 const search = (req, res) => {}
 
-const upload = (req, res) => {}
+const getUpload = (req, res) => {
+  return res.render('upload', { title: 'Upload Video' })
+}
+
+const postUpload = (req, res) => {
+  const { title } = req.body
+
+  const video = {
+    id: videos.length + 1,
+    title,
+    rating: 0,
+    comments: 0,
+    createdAt: 'just now',
+    views: 0,
+  }
+
+  videos.push(video)
+
+  return res.redirect('/')
+}
 
 const watch = (req, res) => {
   const { id } = req.params
@@ -54,4 +73,13 @@ const postEdit = (req, res) => {
 
 const remove = (req, res) => {}
 
-export { trending, search, upload, watch, getEdit, postEdit, remove }
+export {
+  trending,
+  search,
+  getUpload,
+  postUpload,
+  watch,
+  getEdit,
+  postEdit,
+  remove,
+}
