@@ -1,9 +1,7 @@
-const user = {
-  username: 'museloper',
-  loggedIn: true,
+const trending = (req, res) => {
+  const videos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  return res.render('home', { title: 'Home', videos })
 }
-
-const trending = (req, res) => res.render('home', { title: 'Home', user })
 const search = (req, res) => {}
 const upload = (req, res) => {}
 const see = (req, res) => {}

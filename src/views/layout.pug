@@ -7,15 +7,6 @@ html(lang='ko')
     title #{ title } | Notube
   body
     header
-      nav
-        ul
-          if user.loggedIn
-            small Hello, #{ user.username }
-            li
-              a(href='/logout') Logout
-          else
-            li
-              a(href='/login') Login
       h1= title
     main
       block content
