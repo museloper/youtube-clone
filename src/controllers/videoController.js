@@ -1,4 +1,4 @@
-const trending = (req, res) => {}
+const trending = (req, res) => res.render('home', { title: 'Home' })
 const search = (req, res) => {}
 const upload = (req, res) => {}
 const see = (req, res) => {}

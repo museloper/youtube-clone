@@ -11,6 +11,11 @@ const IP = ip.address()
 const app = express()
 const logger = morgan('dev') // 개발자 레벨 로그
 
+// S: view settings
+app.set('views', process.cwd() + '/src/views')
+app.set('view engine', 'pug')
+// E: view settings
+
 // S: 미들웨어
 app.use(logger)
 // E: 미들웨어
