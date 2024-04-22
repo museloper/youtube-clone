@@ -1,5 +1,30 @@
 const trending = (req, res) => {
-  const videos = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  const videos = [
+    {
+      id: 1,
+      title: 'First Video',
+      rating: 5,
+      comments: 2,
+      createdAt: '2 minuate ago',
+      views: 50,
+    },
+    {
+      id: 2,
+      title: 'Second Video',
+      rating: 5,
+      comments: 2,
+      createdAt: '2 minuate ago',
+      views: 50,
+    },
+    {
+      id: 3,
+      title: 'Third Video',
+      rating: 5,
+      comments: 2,
+      createdAt: '2 minuate ago',
+      views: 50,
+    },
+  ]
   return res.render('home', { title: 'Home', videos })
 }
 const search = (req, res) => {}
