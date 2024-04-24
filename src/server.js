@@ -1,3 +1,5 @@
+import './db'
+
 import express from 'express'
 import ip from 'ip'
 import morgan from 'morgan'
@@ -29,8 +31,10 @@ app.use('/users', userRouter)
 
 app.listen(PORT, () =>
   console.log(`
-  Server running at:
-  - local:   http://localhost:${PORT}/
-  - Network: http://${IP}:${PORT}/
+
+🐉 Server running at:
+
+    - local:   http://localhost:${PORT}/
+    - Network: http://${IP}:${PORT}/
   `)
 )
