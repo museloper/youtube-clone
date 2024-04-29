@@ -1,7 +1,8 @@
 import Video from '../models/Video'
 
 const home = async (req, res) => {
-  return res.render('home', { title: 'Home' })
+  const videos = await Video.find({})
+  return res.render('home', { title: 'Home', videos })
 }
 
 const search = (req, res) => {}
@@ -10,9 +11,21 @@ const getUpload = (req, res) => {
   return res.render('upload', { title: 'Upload Video' })
 }
 
-const postUpload = (req, res) => {
-  const { title } = req.body
-  return res.redirect('/')
+const postUpload = async (req, res) => {
+  const { title, description, hashtags } = req.body
+  try {
+    await Video.create({
+      title,
+      description,
+      hashtags: hashtags.split(',').map((word) => `#${word}`),
+    })
+    return res.redirect('/')
+  } catch (err) {
+    return res.render('upload', {
+      title: 'Upload Video',
+      errMessage: err._message,
+    })
+  }
 }
 
 const watch = (req, res) => {
