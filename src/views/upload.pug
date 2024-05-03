@@ -4,8 +4,20 @@ block content
   if errMessage
     span= errMessage
   form(method='post')
-    input(type='text', name='title', placeholder='Title', required)
-    input(type='text', name='description', placeholder='Description', required)
+    input(
+      type='text',
+      name='title',
+      placeholder='Title',
+      required,
+      maxlength=80
+    )
+    input(
+      type='text',
+      name='description',
+      placeholder='Description',
+      required,
+      minlength=20
+    )
     input(
       type='text',
       name='hashtags',

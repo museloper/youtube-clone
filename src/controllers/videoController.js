@@ -28,9 +28,10 @@ const postUpload = async (req, res) => {
   }
 }
 
-const watch = (req, res) => {
+const watch = async (req, res) => {
   const { id } = req.params
-  return res.render('watch', { title: `Watch` })
+  const video = await Video.findById(id)
+  return res.render('watch', { title: `Watch`, video })
 }
 
 const getEdit = (req, res) => {
