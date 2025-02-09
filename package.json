@@ -1,0 +1,27 @@
+{
+  "name": "youtube-clone",
+  "version": "1.0.0",
+  "description": "The best way to watch videos.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/museloper/youtube-clone.git"
+  },
+  "scripts": {
+    "dev": "nodemon --exec babel-node index"
+  },
+  "author": "museloper",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/museloper/youtube-clone/issues"
+  },
+  "homepage": "https://github.com/museloper/youtube-clone#readme",
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.8",
+    "@babel/node": "^7.26.0",
+    "@babel/preset-env": "^7.26.8",
+    "nodemon": "^3.1.9"
+  }
+}
