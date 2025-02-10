@@ -7,7 +7,7 @@
     "url": "git+https://github.com/museloper/youtube-clone.git"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node index"
+    "dev": "nodemon --exec babel-node src/server"
   },
   "author": "museloper",
   "license": "MIT",
@@ -16,12 +16,14 @@
   },
   "homepage": "https://github.com/museloper/youtube-clone#readme",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "express": "^4.21.2"
   },
   "devDependencies": {
     "@babel/core": "^7.26.8",
     "@babel/node": "^7.26.0",
     "@babel/preset-env": "^7.26.8",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "prettier": "^3.5.0"
   }
 }
