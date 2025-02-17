@@ -1,5 +1,5 @@
 const trending = (req, res) => {
-  res.send('this is the home page')
+  res.render('home', { title: 'Home' })
 }
 
 const search = (req, res) => {

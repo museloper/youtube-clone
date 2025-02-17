@@ -7,7 +7,7 @@ const login = (req, res) => {
 }
 
 const logout = (req, res) => {
-  res.send('this is the login page')
+  res.send('this is the logout page')
 }
 
 const view = (req, res) => {
