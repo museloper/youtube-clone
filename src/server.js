@@ -18,6 +18,7 @@ app.locals.basedir = path.join(__dirname, 'views')
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views'))
 app.use(logger)
+app.use(express.urlencoded({ extended: true }))
 app.use('/', router)
 
 const init_server = () =>

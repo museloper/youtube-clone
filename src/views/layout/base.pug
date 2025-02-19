@@ -4,6 +4,8 @@ html(lang='ko')
     title #{ title } | Youtube
     link(rel='stylesheet' href='https://unpkg.com/mvp.css')
   body 
+    header 
+      h1=title
     main
       block content
-    include /partials/footer.pug
+    include /partials/footer
