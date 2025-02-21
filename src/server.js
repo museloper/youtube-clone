@@ -1,3 +1,7 @@
+import './db'
+
+import './models/Video'
+
 import dotenv from 'dotenv'
 import express from 'express'
 import path from 'path'
