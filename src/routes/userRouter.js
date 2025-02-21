@@ -1,5 +1,5 @@
 import express from 'express'
-import { view, edit, remove } from '../controllers/user_controller'
+import { view, edit, remove } from '../controllers/userController'
 
 const ur = express.Router()
 
