@@ -6,7 +6,7 @@ const home = async (req, res) => {
     return res.render('home', { title: 'Home', videos })
   } catch (err) {
     console.error(err)
-    return res.status(500).render('error/500', { err })
+    return res.status(500).render('error/500', { title: 'Server Error', err })
   }
 }
 
@@ -39,7 +39,7 @@ const postUpload = async (req, res) => {
     return res.redirect('/')
   } catch (err) {
     console.error(err)
-    return res.render('video/upload', {
+    return res.status(400).render('video/upload', {
       title: 'Upload Video',
       errorMessage: err._message,
     })
