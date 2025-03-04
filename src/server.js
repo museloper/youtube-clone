@@ -2,6 +2,7 @@ import express from 'express'
 import path from 'path'
 import morgan from 'morgan'
 import session from 'express-session'
+import MongoStore from 'connect-mongo'
 
 import router from './routes/index'
 
@@ -18,9 +19,13 @@ app.use(logger)
 app.use(express.urlencoded({ extended: true }))
 app.use(
   session({
-    secret: 'secret',
-    resave: true,
-    saveUninitialized: true,
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 30 * 60 * 1000,
+    },
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 )
 app.use(localsMiddleware)

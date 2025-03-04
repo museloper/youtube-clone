@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 import './db'
 
 // models
@@ -5,11 +7,6 @@ import './models/Video'
 import './models/User'
 
 import app from './server'
-
-import dotenv from 'dotenv'
-
-// Load environment variables
-dotenv.config()
 
 const PORT = process.env.PORT
 
