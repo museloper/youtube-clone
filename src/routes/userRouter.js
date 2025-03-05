@@ -1,16 +1,24 @@
 import express from 'express'
+
 import {
-  view,
-  edit,
+  getEdit,
+  postEdit,
+  getChangePassword,
+  postChangePassword,
   redirectGithubLogin,
   handleGithubLogin,
 } from '../controllers/userController'
 
+import { loggedInOnlyMiddleware, publicOnlyMiddleware } from '../middlewares'
+
 const ur = express.Router()
 
-ur.get('/:id(\\d+)', view)
-ur.get('/edit', edit)
-ur.get('/github/open', redirectGithubLogin)
-ur.get('/github/callback', handleGithubLogin)
+ur.route('/edit').all(loggedInOnlyMiddleware).get(getEdit).post(postEdit)
+ur.route('/change-password')
+  .all(loggedInOnlyMiddleware)
+  .get(getChangePassword)
+  .post(postChangePassword)
+ur.get('/github/open', publicOnlyMiddleware, redirectGithubLogin)
+ur.get('/github/callback', publicOnlyMiddleware, handleGithubLogin)
 
 export default ur

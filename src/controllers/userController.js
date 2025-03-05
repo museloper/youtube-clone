@@ -4,7 +4,7 @@ import fetch from 'node-fetch'
 import User from '../models/User'
 
 const getJoin = (req, res) => {
-  res.render('user/join', { title: 'Join' })
+  return res.render('user/join', { title: 'Join' })
 }
 
 const postJoin = async (req, res) => {
@@ -45,7 +45,7 @@ const postJoin = async (req, res) => {
 }
 
 const getLogin = (req, res) => {
-  res.render('user/login', { title: 'Login' })
+  return res.render('user/login', { title: 'Login' })
 }
 
 const postLogin = async (req, res) => {
@@ -71,20 +71,95 @@ const postLogin = async (req, res) => {
   req.session.loggedIn = true
   req.session.user = user
 
-  res.redirect('/')
+  return res.redirect('/')
 }
 
 const logout = (req, res) => {
   req.session.destroy()
-  res.redirect('/')
+  return res.redirect('/')
 }
 
-const view = (req, res) => {
-  res.send('this is the user-view page')
+const getEdit = (req, res) => {
+  return res.render('user/edit-profile', { title: 'Edit Profile' })
 }
 
-const edit = (req, res) => {
-  res.send('this is the user-edit page')
+const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { email, username, name, location },
+  } = req
+
+  const user = await User.findById(_id)
+
+  if (user.email !== email) {
+    const exists = await User.exists({ email })
+    if (exists) {
+      return res.status(400).render('user/edit-profile', {
+        title: 'Edit Profile',
+        errorMessage: 'An account with this email already exists.',
+      })
+    }
+  }
+
+  if (user.username !== username) {
+    const exists = await User.exists({ username })
+    if (exists) {
+      return res.status(400).render('user/edit-profile', {
+        title: 'Edit Profile',
+        errorMessage: 'An account with this username already exists.',
+      })
+    }
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      email,
+      username,
+      name,
+      location,
+    },
+    { new: true }
+  )
+  req.session.user = updatedUser
+  return res.redirect('/users/edit')
+}
+
+const getChangePassword = (req, res) => {
+  return res.render('user/change-password', { title: 'Change Password' })
+}
+
+const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, newPassword2 },
+  } = req
+
+  const user = await User.findById(_id)
+
+  if (newPassword !== newPassword2) {
+    return res.status(400).render('user/change-password', {
+      title: 'Change Password',
+      errorMessage: 'Password confirmation does not match.',
+    })
+  }
+
+  const ok = await bcrypt.compare(oldPassword, user.password)
+  if (!ok) {
+    return res.status(400).render('user/change-password', {
+      title: 'Change Password',
+      errorMessage: 'The current password is incorrect.',
+    })
+  }
+
+  user.password = newPassword
+  await user.save()
+
+  return res.redirect('/')
 }
 
 const redirectGithubLogin = (req, res) => {
@@ -178,8 +253,10 @@ export {
   getLogin,
   postLogin,
   logout,
-  view,
-  edit,
+  getEdit,
+  postEdit,
+  getChangePassword,
+  postChangePassword,
   redirectGithubLogin,
   handleGithubLogin,
 }

@@ -12,14 +12,16 @@ import {
 } from '../controllers/userController'
 import { home, search } from '../controllers/videoController'
 
+import { loggedInOnlyMiddleware, publicOnlyMiddleware } from '../middlewares'
+
 const router = express.Router()
 
 // root-router
 router.get('/', home)
 router.get('/search', search)
-router.route('/join').get(getJoin).post(postJoin)
-router.route('/login').get(getLogin).post(postLogin)
-router.get('/logout', logout)
+router.route('/join').all(publicOnlyMiddleware).get(getJoin).post(postJoin)
+router.route('/login').all(publicOnlyMiddleware).get(getLogin).post(postLogin)
+router.get('/logout', loggedInOnlyMiddleware, logout)
 
 // sub-routers
 router.use('/users', users)
