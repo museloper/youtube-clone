@@ -9,11 +9,18 @@ import {
   handleGithubLogin,
 } from '../controllers/userController'
 
-import { loggedInOnlyMiddleware, publicOnlyMiddleware } from '../middlewares'
+import {
+  loggedInOnlyMiddleware,
+  publicOnlyMiddleware,
+  avatarUpload,
+} from '../middlewares'
 
 const ur = express.Router()
 
-ur.route('/edit').all(loggedInOnlyMiddleware).get(getEdit).post(postEdit)
+ur.route('/edit')
+  .all(loggedInOnlyMiddleware)
+  .get(getEdit)
+  .post(avatarUpload.single('avatar'), postEdit)
 ur.route('/change-password')
   .all(loggedInOnlyMiddleware)
   .get(getChangePassword)

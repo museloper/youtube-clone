@@ -9,11 +9,14 @@ import {
   getDelete,
 } from '../controllers/videoController'
 
-import { loggedInOnlyMiddleware } from '../middlewares'
+import { loggedInOnlyMiddleware, videoUpload } from '../middlewares'
 
 const vr = express.Router()
 
-vr.route('/upload').all(loggedInOnlyMiddleware).get(getUpload).post(postUpload)
+vr.route('/upload')
+  .all(loggedInOnlyMiddleware)
+  .get(getUpload)
+  .post(videoUpload.single('video'), postUpload)
 vr.get('/:id([0-9a-f]{24})', view)
 vr.route('/:id([0-9a-f]{24})/edit')
   .all(loggedInOnlyMiddleware)

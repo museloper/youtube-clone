@@ -1,3 +1,5 @@
+import multer from 'multer'
+
 const localsMiddleware = (req, res, next) => {
   res.locals.siteName = 'Youtube'
   res.locals.loggedIn = Boolean(req.session.loggedIn)
@@ -13,4 +15,19 @@ const publicOnlyMiddleware = (req, res, next) => {
   !req.session.loggedIn ? next() : res.redirect('/')
 }
 
-export { localsMiddleware, loggedInOnlyMiddleware, publicOnlyMiddleware }
+const avatarUpload = multer({
+  dest: 'uploads/avatars/',
+  limits: { fileSize: 3000000 },
+})
+const videoUpload = multer({
+  dest: 'uploads/videos/',
+  limits: { fileSize: 10000000 },
+})
+
+export {
+  localsMiddleware,
+  loggedInOnlyMiddleware,
+  publicOnlyMiddleware,
+  avatarUpload,
+  videoUpload,
+}
