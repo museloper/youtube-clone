@@ -1,3 +1,4 @@
+import User from '../models/User'
 import Video from '../models/Video'
 
 const home = async (req, res) => {
@@ -28,16 +29,23 @@ const getUpload = (req, res) => {
 }
 
 const postUpload = async (req, res) => {
+  const {
+    user: { _id },
+  } = req.session
   const { title, description, hashtags } = req.body
   const file = req.file
 
   try {
-    await Video.create({
+    const newVideo = await Video.create({
       title,
       description,
       fileUrl: file.path,
       hashtags: Video.formatHashtags(hashtags),
+      owner: _id,
     })
+    const user = await User.findById(_id)
+    user.videos.push(newVideo._id)
+    user.save()
     return res.redirect('/')
   } catch (err) {
     console.error(err)
@@ -51,7 +59,7 @@ const postUpload = async (req, res) => {
 const view = async (req, res) => {
   const { id } = req.params
 
-  const video = await Video.findById(id)
+  const video = await Video.findById(id).populate('owner')
 
   if (!video) {
     return res.status(404).render('error/404', { title: 'Video not found' })

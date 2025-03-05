@@ -7,6 +7,7 @@ import {
   postChangePassword,
   redirectGithubLogin,
   handleGithubLogin,
+  view,
 } from '../controllers/userController'
 
 import {
@@ -27,5 +28,6 @@ ur.route('/change-password')
   .post(postChangePassword)
 ur.get('/github/open', publicOnlyMiddleware, redirectGithubLogin)
 ur.get('/github/callback', publicOnlyMiddleware, handleGithubLogin)
+ur.get('/:id', view)
 
 export default ur

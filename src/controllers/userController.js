@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 import fetch from 'node-fetch'
 
 import User from '../models/User'
+import Video from '../models/Video'
 
 const getJoin = (req, res) => {
   return res.render('user/join', { title: 'Join' })
@@ -164,6 +165,17 @@ const postChangePassword = async (req, res) => {
   return res.redirect('/')
 }
 
+const view = async (req, res) => {
+  const { id } = req.params
+  const user = await User.findById(id).populate('videos')
+
+  if (!user) {
+    return res.status('404').render('404', { title: 'User not found.' })
+  }
+
+  return res.render('user/profile', { title: user.name, user })
+}
+
 const redirectGithubLogin = (req, res) => {
   const config = {
     client_id: process.env.GITHUB_CLIENT_ID,
@@ -259,6 +271,7 @@ export {
   postEdit,
   getChangePassword,
   postChangePassword,
+  view,
   redirectGithubLogin,
   handleGithubLogin,
 }
