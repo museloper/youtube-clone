@@ -69,6 +69,9 @@ const view = async (req, res) => {
 }
 
 const getEdit = async (req, res) => {
+  const {
+    user: { _id },
+  } = req.session
   const { id } = req.params
 
   const video = await Video.findById(id)
@@ -77,10 +80,17 @@ const getEdit = async (req, res) => {
     return res.status(404).render('error/404', { title: 'Video not found' })
   }
 
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).render('error/403', { title: 'Permission Denied' })
+  }
+
   return res.render('video/edit', { title: `Editing ${video.title}`, video })
 }
 
 const postEdit = async (req, res) => {
+  const {
+    user: { _id },
+  } = req.session
   const { id } = req.params
   const { title, description, hashtags } = req.body
 
@@ -88,6 +98,10 @@ const postEdit = async (req, res) => {
 
   if (!video) {
     return res.status(404).render('error/404', { title: 'Video not found' })
+  }
+
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).render('error/403', { title: 'Permission Denied' })
   }
 
   await Video.findByIdAndUpdate(id, {
@@ -100,7 +114,21 @@ const postEdit = async (req, res) => {
 }
 
 const getDelete = async (req, res) => {
+  const {
+    user: { _id },
+  } = req.session
   const { id } = req.params
+
+  const video = await Video.findById(id)
+
+  if (!video) {
+    return res.status(404).render('error/404', { title: 'Video not found' })
+  }
+
+  if (String(video.owner) !== String(_id)) {
+    return res.status(403).render('error/403', { title: 'Permission Denied' })
+  }
+
   await Video.findByIdAndDelete(id)
   return res.redirect('/')
 }
