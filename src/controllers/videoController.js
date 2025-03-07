@@ -3,7 +3,9 @@ import Video from '../models/Video'
 
 const home = async (req, res) => {
   try {
-    const videos = await Video.find({}).sort({ createdAt: 'desc' })
+    const videos = await Video.find({})
+      .sort({ createdAt: 'desc' })
+      .populate('owner')
     return res.render('home', { title: 'Home', videos })
   } catch (err) {
     console.error(err)
@@ -19,7 +21,7 @@ const search = async (req, res) => {
       title: {
         $regex: new RegExp(keyword, 'i'),
       },
-    })
+    }).populate('owner')
   }
   return res.render('video/search', { title: 'Search', videos })
 }
