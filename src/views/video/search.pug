@@ -2,7 +2,7 @@ extends /layout/base
 include /mixins/video
 
 block content 
-  form(method="GET").search__form
+  form.search__form(method="GET")
     input(type="text" name="keyword" placeholder="Search by title")
     button 
       i.fas.fa-search 
