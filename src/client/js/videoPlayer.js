@@ -13,29 +13,30 @@ const videoContainer = document.querySelector('#videoContainer')
 const videoControls = document.querySelector('#videoControls')
 
 const TIME_STEP = 5
+const CONTROLS_TIMEOUT = 3000
 
-// 초기 볼륨
 let volume = 0.5
 video.volume = volume
 
 let controlsTimeout = null
-let controlsMovementTimeout = null
 
 const formatTime = (seconds) => {
   return new Date(seconds * 1000).toISOString().substring(14, 19)
 }
 
-const handlePlayClick = () => {
+const togglePlay = () => {
   if (video.paused) {
     video.play()
   } else {
     video.pause()
+    clearTimeout(controlsTimeout)
+    controlsTimeout = null
   }
 
   playBtnIcon.classList = video.paused ? 'fas fa-play' : 'fas fa-pause'
 }
 
-const handleMuteClick = () => {
+const toggleMute = () => {
   if (video.muted) {
     video.muted = false
   } else {
@@ -48,7 +49,7 @@ const handleMuteClick = () => {
   volumeRange.value = video.muted ? 0 : volume
 }
 
-const handleVolumeChange = (event) => {
+const changeVolume = (event) => {
   const {
     target: { value },
   } = event
@@ -65,27 +66,28 @@ const handleVolumeChange = (event) => {
   }
 }
 
-const handleLoadedMetadata = () => {
+const updateMetaData = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration))
   timeline.max = Math.floor(video.duration)
 }
 
-const handleTimeUpdate = () => {
+const updateTime = () => {
   currentTime.innerText = formatTime(Math.floor(video.currentTime))
   timeline.value = Math.floor(video.currentTime)
 }
 
-const handleFullScreen = () => {
+const toggleFullScreen = () => {
   const fullScreen = document.fullscreenElement
   if (fullScreen) {
-    console.log('축소')
     document.exitFullscreen()
-    fullScreenIcon.classList = 'fas fa-expand'
   } else {
-    console.log('확대')
     videoContainer.requestFullscreen()
-    fullScreenIcon.classList = 'fas fa-compress'
   }
+}
+
+const changeFullScreenIcon = () => {
+  const fullScreen = document.fullscreenElement
+  fullScreenIcon.classList = fullScreen ? 'fas fa-compress' : 'fas fa-expand'
 }
 
 const handleMouseMove = () => {
@@ -93,29 +95,33 @@ const handleMouseMove = () => {
     clearTimeout(controlsTimeout)
     controlsTimeout = null
   }
-  if (controlsMovementTimeout) {
-    clearTimeout(controlsMovementTimeout)
-    controlsMovementTimeout = null
-  }
   videoControls.classList.add('showing')
-  controlsMovementTimeout = setTimeout(hideControls, 3000)
+  controlsTimeout = setTimeout(hideControls, CONTROLS_TIMEOUT)
 }
 
 const hideControls = () => {
+  if (video.paused) return false
   videoControls.classList.remove('showing')
 }
 
 const handleMouseLeave = () => {
-  controlsTimeout = setTimeout(hideControls, 3000)
+  controlsTimeout = setTimeout(hideControls, CONTROLS_TIMEOUT)
 }
 
 const handleKeydown = (event) => {
+  if (controlsTimeout) {
+    clearTimeout(controlsTimeout)
+    controlsTimeout = null
+  }
+  videoControls.classList.add('showing')
+  controlsTimeout = setTimeout(hideControls, CONTROLS_TIMEOUT)
+
   if (event.code === 'Space') {
-    handlePlayClick()
+    togglePlay()
   } else if (event.code === 'KeyF') {
-    handleFullScreen()
+    toggleFullScreen()
   } else if (event.code === 'KeyM') {
-    handleMuteClick()
+    toggleMute()
   } else if (event.code === 'ArrowRight') {
     video.currentTime += TIME_STEP
   } else if (event.code === 'ArrowLeft') {
@@ -123,21 +129,22 @@ const handleKeydown = (event) => {
   }
 }
 
-playBtn.addEventListener('click', handlePlayClick)
-muteBtn.addEventListener('click', handleMuteClick)
-volumeRange.addEventListener('input', handleVolumeChange)
+playBtn.addEventListener('click', togglePlay)
+muteBtn.addEventListener('click', toggleMute)
+volumeRange.addEventListener('input', changeVolume)
 video.readyState
-  ? handleLoadedMetadata()
-  : video.addEventListener('loadedmetadata', handleLoadedMetadata)
-video.addEventListener('timeupdate', handleTimeUpdate)
+  ? updateMetaData()
+  : video.addEventListener('loadedmetadata', updateMetaData)
+video.addEventListener('timeupdate', updateTime)
 timeline.addEventListener('input', (event) => {
   const {
     target: { value },
   } = event
   video.currentTime = value
 })
-fullScreenBtn.addEventListener('click', handleFullScreen)
+fullScreenBtn.addEventListener('click', toggleFullScreen)
 videoContainer.addEventListener('mousemove', handleMouseMove)
-videoContainer.addEventListener('mouseleave', handleMouseLeave)
-video.addEventListener('click', handlePlayClick)
+videoContainer.addEventListener('mouseleave', hideControls)
+video.addEventListener('click', togglePlay)
 document.addEventListener('keydown', handleKeydown)
+document.addEventListener('fullscreenchange', changeFullScreenIcon)
