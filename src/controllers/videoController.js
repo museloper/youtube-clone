@@ -135,6 +135,21 @@ const getDelete = async (req, res) => {
   return res.redirect('/')
 }
 
+const increaseView = async (req, res) => {
+  const { id } = req.params
+
+  const video = await Video.findById(id)
+
+  if (!video) {
+    return res.sendStatus(404)
+  }
+
+  video.meta.views += 1
+  await video.save()
+
+  return res.sendStatus(200)
+}
+
 export {
   home,
   search,
@@ -144,4 +159,5 @@ export {
   getEdit,
   postEdit,
   getDelete,
+  increaseView,
 }

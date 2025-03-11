@@ -2,6 +2,7 @@ import express from 'express'
 
 import users from './userRouter'
 import videos from './videoRouter'
+import api from './apiRouter'
 
 import {
   getJoin,
@@ -26,5 +27,6 @@ router.get('/logout', loggedInOnlyMiddleware, logout)
 // sub-routers
 router.use('/users', users)
 router.use('/videos', videos)
+router.use('/api', api)
 
 export default router

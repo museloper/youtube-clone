@@ -104,10 +104,6 @@ const hideControls = () => {
   videoControls.classList.remove('showing')
 }
 
-const handleMouseLeave = () => {
-  controlsTimeout = setTimeout(hideControls, CONTROLS_TIMEOUT)
-}
-
 const handleKeydown = (event) => {
   if (controlsTimeout) {
     clearTimeout(controlsTimeout)
@@ -129,13 +125,24 @@ const handleKeydown = (event) => {
   }
 }
 
+const increaseView = async () => {
+  const {
+    dataset: { id },
+  } = videoContainer
+  await fetch(`/api/videos/${id}/view`, {
+    method: 'POST',
+  })
+}
+
 playBtn.addEventListener('click', togglePlay)
 muteBtn.addEventListener('click', toggleMute)
 volumeRange.addEventListener('input', changeVolume)
+video.addEventListener('click', togglePlay)
 video.readyState
   ? updateMetaData()
   : video.addEventListener('loadedmetadata', updateMetaData)
 video.addEventListener('timeupdate', updateTime)
+video.addEventListener('ended', increaseView)
 timeline.addEventListener('input', (event) => {
   const {
     target: { value },
@@ -145,6 +152,5 @@ timeline.addEventListener('input', (event) => {
 fullScreenBtn.addEventListener('click', toggleFullScreen)
 videoContainer.addEventListener('mousemove', handleMouseMove)
 videoContainer.addEventListener('mouseleave', hideControls)
-video.addEventListener('click', togglePlay)
 document.addEventListener('keydown', handleKeydown)
 document.addEventListener('fullscreenchange', changeFullScreenIcon)
