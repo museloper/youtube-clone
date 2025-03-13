@@ -27,10 +27,10 @@ let isLoaded = false
 const init = async () => {
   stream = await navigator.mediaDevices.getUserMedia({
     video: {
-      width: 400,
-      height: 300,
+      width: 1024,
+      height: 576,
     },
-    audio: false,
+    audio: true,
   })
   preview.srcObject = stream
   preview.play()
@@ -64,10 +64,10 @@ const loadFFmpeg = async () => {
 }
 
 const startRecording = () => {
-  recordBtn.innerText = 'Stop Recording'
+  recordBtn.innerText = 'Recording'
+  recordBtn.disabled = true
 
   recordBtn.removeEventListener('click', startRecording)
-  recordBtn.addEventListener('click', stopRecording)
 
   recorder = new MediaRecorder(stream)
   recorder.ondataavailable = (event) => {
@@ -76,17 +76,16 @@ const startRecording = () => {
     preview.src = video
     preview.loop = true
     preview.play()
+
+    recordBtn.innerText = 'Download'
+    recordBtn.disabled = false
+    recordBtn.addEventListener('click', downloadVideo)
   }
   recorder.start()
-}
 
-const stopRecording = () => {
-  recordBtn.innerText = 'Download Video'
-
-  recordBtn.removeEventListener('click', stopRecording)
-  recordBtn.addEventListener('click', downloadVideo)
-
-  recorder.stop()
+  setTimeout(() => {
+    recorder.stop()
+  }, 5000)
 }
 
 const downloadVideo = async () => {
