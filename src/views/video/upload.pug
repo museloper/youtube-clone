@@ -8,8 +8,10 @@ block content
   if errorMessage
     span=errorMessage
   form(method="POST", enctype="multipart/form-data")
-    label(for="video") Video
+    label(for="video") Video File
     input(type="file", id="video", name="video", accept="video/*", required)
+    label(for="thumbnail") Thumbnail File
+    input(type="file", id="thumbnail", name="thumbnail", accept="image/*", required)
     input(type="text", name="title", placeholder="Title", maxlength=80, required)
     input(type="text", name="description", placeholder="Description", minlength=20, required)
     input(type="text", name="hashtags", placeholder="Hashtags, separated by comma.", required)

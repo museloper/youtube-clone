@@ -35,13 +35,14 @@ const postUpload = async (req, res) => {
     user: { _id },
   } = req.session
   const { title, description, hashtags } = req.body
-  const file = req.file
+  const { video, thumbnail } = req.files
 
   try {
     const newVideo = await Video.create({
       title,
       description,
-      fileUrl: file.path,
+      videoUrl: video[0].path,
+      thumbnailUrl: thumbnail[0].path,
       hashtags: Video.formatHashtags(hashtags),
       owner: _id,
     })
