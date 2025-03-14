@@ -5,6 +5,7 @@ import './db'
 // models
 import './models/Video'
 import './models/User'
+import './models/Comment'
 
 import app from './server'
 

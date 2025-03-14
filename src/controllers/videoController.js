@@ -151,6 +151,12 @@ const increaseView = async (req, res) => {
   return res.sendStatus(200)
 }
 
+const createComment = async (req, res) => {
+  console.log(req.params)
+  console.log(req.body)
+  res.send()
+}
+
 export {
   home,
   search,
@@ -161,4 +167,5 @@ export {
   postEdit,
   getDelete,
   increaseView,
+  createComment,
 }
