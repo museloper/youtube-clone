@@ -46,3 +46,39 @@ main {
   margin: 0 auto;
   margin-top: 50px;
 }
+
+@keyframes fade {
+  0% {
+    transform: translateY(0px);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(46px);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(46px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0px);
+    opacity: 0;
+  }
+}
+
+.message {
+  position: absolute;
+  top: -36px;
+  left: 0;
+  right: 0;
+  max-width: 200px;
+  padding: 10px 20px;
+  margin: 0 auto;
+  border-radius: 5px;
+  text-align: center;
+  animation: fade 4s ease-in-out forwards;
+  &.error {
+    background-color: tomato;
+    color: white;
+  }
+}

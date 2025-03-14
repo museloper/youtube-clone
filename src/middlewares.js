@@ -8,11 +8,21 @@ const localsMiddleware = (req, res, next) => {
 }
 
 const loggedInOnlyMiddleware = (req, res, next) => {
-  req.session.loggedIn ? next() : res.redirect('/login')
+  if (req.session.loggedIn) {
+    next()
+  } else {
+    req.flash('error', 'Login is required')
+    res.redirect('/login')
+  }
 }
 
 const publicOnlyMiddleware = (req, res, next) => {
-  !req.session.loggedIn ? next() : res.redirect('/')
+  if (!req.session.loggedIn) {
+    next()
+  } else {
+    req.flash('error', 'Not authorized')
+    res.redirect('/')
+  }
 }
 
 const avatarUpload = multer({
