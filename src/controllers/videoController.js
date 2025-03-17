@@ -1,5 +1,6 @@
 import User from '../models/User'
 import Video from '../models/Video'
+import Comment from '../models/Comment'
 
 const home = async (req, res) => {
   try {
@@ -62,7 +63,7 @@ const postUpload = async (req, res) => {
 const view = async (req, res) => {
   const { id } = req.params
 
-  const video = await Video.findById(id).populate('owner')
+  const video = await Video.findById(id).populate('owner').populate('comments')
 
   if (!video) {
     return res.status(404).render('error/404', { title: 'Video not found' })
@@ -152,9 +153,28 @@ const increaseView = async (req, res) => {
 }
 
 const createComment = async (req, res) => {
-  console.log(req.params)
-  console.log(req.body)
-  res.send()
+  const {
+    params: { id },
+    body: { text },
+    session: { user },
+  } = req
+
+  const video = await Video.findById(id)
+
+  if (!video) {
+    return res.sendStatus(404)
+  }
+
+  const comment = await Comment.create({
+    text,
+    video: id,
+    owner: user._id,
+  })
+
+  video.comments.push(comment._id)
+  video.save()
+
+  return res.sendStatus(201).json({ newCommentId: comment._id })
 }
 
 export {
