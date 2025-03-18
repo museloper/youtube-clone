@@ -125,6 +125,10 @@ const downloadVideo = async () => {
   download(mp4_url, files.output)
   download(thumbnail_url, files.thumbnail)
 
+  await ffmpeg.deleteFile(files.input)
+  await ffmpeg.deleteFile(files.output)
+  await ffmpeg.deleteFile(files.thumbnail)
+
   URL.revokeObjectURL(video)
   URL.revokeObjectURL(mp4_url)
   URL.revokeObjectURL(thumbnail_url)

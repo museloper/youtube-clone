@@ -12,10 +12,10 @@ import { localsMiddleware } from './middlewares'
 const app = express()
 const logger = morgan('dev')
 
-app.locals.basedir = path.join(__dirname, 'views')
+app.locals.basedir = path.join(process.cwd(), 'src', 'views')
 
 app.set('view engine', 'pug')
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(process.cwd(), 'src', 'views'))
 app.use(logger)
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
