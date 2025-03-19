@@ -39,26 +39,13 @@ const init = async () => {
 }
 
 const loadFFmpeg = async () => {
-  const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd'
   ffmpeg = new FFmpeg()
 
-  ffmpeg.on('log', ({ message }) => {
-    console.log(message)
-  })
+  // ffmpeg.on('log', ({ message }) => {
+  //   console.log(message)
+  // })
 
-  const ffmpegCoreUrl = await toBlobURL(
-    `${baseURL}/ffmpeg-core.js`,
-    'text/javascript'
-  )
-  const ffmpegWasmUrl = await toBlobURL(
-    `${baseURL}/ffmpeg-core.wasm`,
-    'application/wasm'
-  )
-
-  await ffmpeg.load({
-    coreURL: ffmpegCoreUrl,
-    wasmURL: ffmpegWasmUrl,
-  })
+  await ffmpeg.load()
 
   isLoaded = true
 }
