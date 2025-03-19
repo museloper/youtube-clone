@@ -11,22 +11,29 @@
     margin-top: 14px;
 
     .video-mixin__avatar {
+      flex: 0 0 auto;
       width: 45px;
+
+      img {
+        border-radius: 50%;
+      }
     }
 
     .video-mixin__title {
       display: block;
       margin-top: 2px;
       font-size: 14px;
+      line-height: 20px;
+      color: white;
     }
 
     .video-mixin__meta {
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 12px;
-      color: #aaa;
+      color: $youtube-meta;
 
       div {
-        margin-top: 5px;
+        margin-top: 7px;
       }
     }
   }
