@@ -26,11 +26,26 @@
   width: 100%;
   margin: 0 auto;
   margin-top: 20px;
+  .video__comment-form {
+    display: flex;
+    flex-direction: column;
+    textarea::placeholder {
+      text-align: center;
+      line-height: 150px;
+    }
+    button {
+      padding: 10px 0;
+    }
+  }
   .video__comment {
     padding: 10px 25px;
     margin-bottom: 10px;
     border-radius: 9999px;
     background-color: white;
     color: black;
+
+    .video__comments--delete {
+      cursor: pointer;
+    }
   }
 }

@@ -29,9 +29,41 @@ const s3VideoStorage = multerS3({
 })
 
 const localsMiddleware = (req, res, next) => {
-  res.locals.siteName = 'Youtube'
+  const MAX_LENGTH = 32
+  const truncateText = (text) => {
+    return text.length > MAX_LENGTH ? text.slice(0, MAX_LENGTH) + '...' : text
+  }
+
+  const formatTimeAgo = (date) => {
+    const now = new Date()
+    const past = new Date(date)
+
+    const seconds = Math.floor((now - past) / 1000)
+
+    const units = [
+      { name: '년', value: 60 * 60 * 24 * 365 },
+      { name: '개월', value: 60 * 60 * 24 * 30 },
+      { name: '일', value: 60 * 60 * 24 },
+      { name: '시간', value: 60 * 60 },
+      { name: '분', value: 60 },
+      { name: '초', value: 1 },
+    ]
+
+    for (const unit of units) {
+      const diff = Math.floor(seconds / unit.value)
+      if (diff >= 1) {
+        return `${diff}${unit.name} 전`
+      }
+    }
+
+    return '방금 전'
+  }
+
+  res.locals.siteName = 'YouTube'
   res.locals.loggedIn = Boolean(req.session.loggedIn)
   res.locals.loggedInUser = req.session.user || {}
+  res.locals.truncateText = truncateText
+  res.locals.formatTimeAgo = formatTimeAgo
   next()
 }
 

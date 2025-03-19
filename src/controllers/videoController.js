@@ -53,9 +53,9 @@ const postUpload = async (req, res) => {
     return res.redirect('/')
   } catch (err) {
     console.error(err)
+    req.flash('error', err._message)
     return res.status(400).render('video/upload', {
       title: 'Upload Video',
-      errorMessage: err._message,
     })
   }
 }
@@ -63,7 +63,12 @@ const postUpload = async (req, res) => {
 const view = async (req, res) => {
   const { id } = req.params
 
-  const video = await Video.findById(id).populate('owner').populate('comments')
+  const video = await Video.findById(id)
+    .populate('owner')
+    .populate({
+      path: 'comments',
+      options: { sort: { createdAt: -1 } },
+    })
 
   if (!video) {
     return res.status(404).render('error/404', { title: 'Video not found' })
@@ -174,7 +179,16 @@ const createComment = async (req, res) => {
   video.comments.push(comment._id)
   video.save()
 
-  return res.sendStatus(201).json({ newCommentId: comment._id })
+  return res.status(201).json({ newCommentId: comment._id })
+}
+
+const deleteComment = async (req, res) => {
+  try {
+    await Comment.findByIdAndDelete(req.params.id)
+    return res.sendStatus(200)
+  } catch {
+    return res.sendStatus(500)
+  }
 }
 
 export {
@@ -188,4 +202,5 @@ export {
   getDelete,
   increaseView,
   createComment,
+  deleteComment,
 }

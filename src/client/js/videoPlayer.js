@@ -112,6 +112,10 @@ const handleKeydown = (event) => {
   videoControls.classList.add('showing')
   controlsTimeout = setTimeout(hideControls, CONTROLS_TIMEOUT)
 
+  if (event.target.nodeName === 'TEXTAREA') {
+    return
+  }
+
   if (event.code === 'Space') {
     togglePlay()
   } else if (event.code === 'KeyF') {

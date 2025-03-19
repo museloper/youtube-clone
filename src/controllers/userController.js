@@ -13,17 +13,17 @@ const postJoin = async (req, res) => {
   const { email, username, password, password2, name, location } = req.body
 
   if (password !== password2) {
+    req.flash('error', 'Password confirmation does not match.')
     return res.status(400).render('user/join', {
       title,
-      errorMessage: 'Password confirmation does not match.',
     })
   }
 
   const exists = await User.exists({ $or: [{ email }, { username }] })
   if (exists) {
+    req.flash('error', 'This email/username is already taken.')
     return res.status(400).render('user/join', {
       title,
-      errorMessage: 'This email/username is already taken.',
     })
   }
 
@@ -38,9 +38,9 @@ const postJoin = async (req, res) => {
     return res.redirect('/login')
   } catch (err) {
     console.error(err)
+    req.flash('error', err._message)
     return res.status(400).render('user/join', {
       title: 'Join',
-      errorMessage: err._message,
     })
   }
 }
@@ -55,17 +55,17 @@ const postLogin = async (req, res) => {
 
   const user = await User.findOne({ username, socialOnly: false })
   if (!user) {
+    req.flash('error', 'An account with this username does not exists.')
     return res.status(400).render('user/login', {
       title,
-      errorMessage: 'An account with this username does not exists.',
     })
   }
 
   const ok = await bcrypt.compare(password, user.password)
   if (!ok) {
+    req.flash('error', 'Wrong password.')
     return res.status(400).render('user/login', {
       title,
-      errorMessage: 'Wrong password.',
     })
   }
 
@@ -98,9 +98,9 @@ const postEdit = async (req, res) => {
   if (user.email !== email) {
     const exists = await User.exists({ email })
     if (exists) {
+      req.flash('error', 'An account with this email already exists.')
       return res.status(400).render('user/edit-profile', {
         title: 'Edit Profile',
-        errorMessage: 'An account with this email already exists.',
       })
     }
   }
@@ -108,9 +108,9 @@ const postEdit = async (req, res) => {
   if (user.username !== username) {
     const exists = await User.exists({ username })
     if (exists) {
+      req.flash('error', 'An account with this username already exists.')
       return res.status(400).render('user/edit-profile', {
         title: 'Edit Profile',
-        errorMessage: 'An account with this username already exists.',
       })
     }
   }
@@ -145,17 +145,17 @@ const postChangePassword = async (req, res) => {
   const user = await User.findById(_id)
 
   if (newPassword !== newPassword2) {
+    req.flash('error', 'Password confirmation does not match.')
     return res.status(400).render('user/change-password', {
       title: 'Change Password',
-      errorMessage: 'Password confirmation does not match.',
     })
   }
 
   const ok = await bcrypt.compare(oldPassword, user.password)
   if (!ok) {
+    req.flash('error', 'The current password is incorrect.')
     return res.status(400).render('user/change-password', {
       title: 'Change Password',
-      errorMessage: 'The current password is incorrect.',
     })
   }
 

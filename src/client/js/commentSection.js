@@ -1,8 +1,9 @@
 const videoContainer = document.querySelector('#videoContainer')
 
 const form = document.querySelector('#commentForm')
+const deleteBtns = document.querySelectorAll('.video__comments--delete')
 
-const addComment = (comment, newCommentId) => {
+const addComment = (text, newCommentId) => {
   const videoComments = document.querySelector('.video__comments ul')
 
   const newComment = document.createElement('li')
@@ -13,10 +14,10 @@ const addComment = (comment, newCommentId) => {
   icon.className = 'fas fa-comment'
 
   const span = document.createElement('span')
-  span.innerText = ` ${comment}`
+  span.innerText = ` ${text}`
 
   const span2 = document.createElement('span')
-  span.innerText = ' ❌'
+  span2.innerText = ' ❌'
 
   newComment.appendChild(icon)
   newComment.appendChild(span)
@@ -46,9 +47,28 @@ const submit = async (event) => {
 
   if (response.status === 201) {
     const { newCommentId } = await response.json()
-    addComment(comment, newCommentId)
+    addComment(text, newCommentId)
     textarea.value = ''
   }
 }
 
+const deleteComment = async (event) => {
+  const targetNode = event.target
+  const li = targetNode.parentNode
+  const commentId = li.dataset.id
+
+  if (confirm('이 댓글을 삭제하시겠습니까?')) {
+    const response = await fetch(`/api/comments/${commentId}`, {
+      method: 'DELETE',
+    })
+
+    if (response.status === 200) {
+      li.remove()
+    }
+  }
+}
+
 if (form) form.addEventListener('submit', submit)
+deleteBtns.forEach((btn) => {
+  btn.addEventListener('click', deleteComment)
+})

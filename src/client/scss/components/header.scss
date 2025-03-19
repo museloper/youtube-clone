@@ -5,8 +5,18 @@ header {
   padding: 20px 50px;
 
   .header__logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 38px;
     color: $youtube-red;
+
+    .header__logo--title {
+      margin-left: 10px;
+      font-size: 20px;
+      font-weight: bolder;
+      color: white;
+    }
   }
 
   ul {

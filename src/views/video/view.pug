@@ -2,7 +2,7 @@ extends /layout/base
 
 block content
   div#videoContainer(data-id=video._id)
-    video(src=`/${video.videoUrl}`) 
+    video(src=`${video.videoUrl}`) 
     div#videoControls.videoControls
       div.videoControls__play
         span#play.videoControls__playBtn
@@ -33,7 +33,7 @@ block content
   if loggedIn
     div.video__comments
       form#commentForm.video__comment-form
-        textarea(cols="30", rows="10", placeholder="Add a public comment")
+        textarea(cols="34", rows="10", placeholder="Add a public comment")
         button Add Comment
 
   div.video__comments
@@ -42,7 +42,8 @@ block content
         li.video__comment(data-id=comment.id)
           i.fas.fa-comment
           span  #{ comment.text }
-          span ❌
+          if String(comment.owner._id) === String(loggedInUser._id)
+            span.video__comments--delete ❌
 
 block scripts 
   script(src="/assets/js/videoPlayer.js") 
