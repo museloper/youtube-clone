@@ -2,6 +2,8 @@ import User from '../models/User'
 import Video from '../models/Video'
 import Comment from '../models/Comment'
 
+import { deleteObject } from '../middlewares'
+
 const home = async (req, res) => {
   try {
     const videos = await Video.find({})
@@ -138,7 +140,13 @@ const getDelete = async (req, res) => {
     return res.status(403).render('error/403', { title: 'Permission Denied' })
   }
 
-  await Video.findByIdAndDelete(id)
+  try {
+    await Video.findByIdAndDelete(id)
+    await deleteObject(video.videoUrl)
+  } catch {
+    return res.status(403).render('error/500', { title: '' })
+  }
+
   return res.redirect('/')
 }
 
